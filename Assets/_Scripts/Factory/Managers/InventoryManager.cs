@@ -8,8 +8,7 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager main;
 
     [Header("Attributes")]
-    [SerializeField] SerializableDictionary<GameObject, int> inventoryData;
-    [SerializeField] List<SerialKeyValue<GameObject, int>> testKeyValue;
+    [SerializeField] List<SerialKeyValue<GameObject, int>> inventoryData;
 
     private Dictionary<string, int> inventory;
 
@@ -17,7 +16,7 @@ public class InventoryManager : MonoBehaviour
     {
         main = this;
         inventory = new Dictionary<string, int>();
-        foreach (KeyValuePair<GameObject, int> pair in inventoryData)
+        foreach (SerialKeyValue<GameObject, int> pair in inventoryData)
         {
             inventory.Add(pair.Key.GetComponent<Item>().itemName, pair.Value);
         }

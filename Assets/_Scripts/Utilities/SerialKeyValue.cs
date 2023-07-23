@@ -3,12 +3,12 @@ using System;
 [Serializable]
 public class SerialKeyValue<TKey, TValue>
 {
-    public TKey key;
-    public TValue value;
+    public TKey Key;
+    public TValue Value;
 
     public SerialKeyValue(TKey _key, TValue _value)
     {
-        this.key = _key;
-        this.value = _value;
+        this.Key = _key;
+        this.Value = _value;
     }
 }
