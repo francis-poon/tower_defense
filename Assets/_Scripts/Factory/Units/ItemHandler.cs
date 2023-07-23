@@ -49,7 +49,7 @@ public class ItemHandler : MonoBehaviour
         }
         
     }
-    public void ProcessItem(GameObject _item)
+    public virtual void ProcessItem(GameObject _item)
     {
         if (conversions.ContainsKey(_item.GetComponent<Item>().itemName))
         {
