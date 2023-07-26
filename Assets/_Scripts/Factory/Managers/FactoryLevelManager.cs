@@ -11,6 +11,7 @@ public class FactoryLevelManager : MonoBehaviour
     [SerializeField] private GameObject gridPrefab;
     [SerializeField] private GameObject editingMenu;
     [SerializeField] private GameObject gameMenu;
+    [SerializeField] private GameObject itemPickerMenu;
 
     [Header("Attributes")]
     [SerializeField] private int gridHeight;
@@ -43,6 +44,7 @@ public class FactoryLevelManager : MonoBehaviour
 
         DisableEditingMenu();
         EnableGameMenu();
+        DisableItemPickerMenu();
         Pause();
     }
 
@@ -92,6 +94,22 @@ public class FactoryLevelManager : MonoBehaviour
         if (gameMenu.activeSelf)
         {
             gameMenu.SetActive(false);
+        }
+    }
+
+    public void EnableItemPickerMenu()
+    {
+        if (!itemPickerMenu.activeSelf)
+        {
+            itemPickerMenu.SetActive(true);
+        }
+    }
+
+    public void DisableItemPickerMenu()
+    {
+        if (itemPickerMenu.activeSelf)
+        {
+            itemPickerMenu.SetActive(false);
         }
     }
 
@@ -187,7 +205,26 @@ public class FactoryLevelManager : MonoBehaviour
                     component.Select();
                 }
                 break;
+            case GameState.Play:
+                if (component.gameObject.name.Contains("Spawner"))
+                {
+                    EnableItemPickerMenu();
+                    gameObject.GetComponent<ItemPicker>().SetSpawner(component.gameObject);
+                }       
+                break;
+            case GameState.Pause:
+                if (component.gameObject.name.Contains("Spawner"))
+                {
+                    EnableItemPickerMenu();
+                    gameObject.GetComponent<ItemPicker>().SetSpawner(component.gameObject);
+                }
+                break;
         }
+    }
+
+    public void OnItemSelected()
+    {
+        DisableItemPickerMenu();
     }
 
     /*

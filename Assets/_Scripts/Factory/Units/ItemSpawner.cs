@@ -16,11 +16,13 @@ public class ItemSpawner : MonoBehaviour
 
     private void Start()
     {
-        selectedItem = 0;
+        selectedItem = -1;
     }
 
     void Update()
     {
+        if (selectedItem == -1) return;
+
         timeSinceLastSpawn += Time.deltaTime;
         if (timeSinceLastSpawn >= (1f / itemSpawnRate))
         {
@@ -36,5 +38,10 @@ public class ItemSpawner : MonoBehaviour
             GameObject item = Instantiate(itemPrefabs[selectedItem], transform.position, Quaternion.identity);
             GetComponent<ItemHandler>().ProcessItem(item);
         }
+    }
+
+    public void SelectItem(int _itemIndex)
+    {
+        selectedItem = _itemIndex;
     }
 }

@@ -252,7 +252,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrefabs:
   - {fileID: 2385675583366129763, guid: 62cb69e01dd73524982509a9dda768cc, type: 3}
+  - {fileID: 2486853708270992944, guid: 44a051b6c2a39e5448df301907f26414, type: 3}
   sendPoint: {fileID: 6100435562962580985}
+  itemPickerMenu: {fileID: 0}
   itemSpawnRate: 0.5
 --- !u!114 &93741167012024476
 MonoBehaviour:
