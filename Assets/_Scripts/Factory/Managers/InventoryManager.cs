@@ -10,15 +10,15 @@ public class InventoryManager : MonoBehaviour
     [Header("Attributes")]
     [SerializeField] List<SerialKeyValue<GameObject, int>> inventoryData;
 
-    private Dictionary<string, int> inventory;
+    private Dictionary<string, InventoryMeta> inventory;
 
     private void Start()
     {
         main = this;
-        inventory = new Dictionary<string, int>();
+        inventory = new Dictionary<string, InventoryMeta>();
         foreach (SerialKeyValue<GameObject, int> pair in inventoryData)
         {
-            inventory.Add(pair.Key.GetComponent<Item>().itemName, pair.Value);
+            inventory.Add(pair.Key.GetComponent<Item>().itemName, new InventoryMeta(pair.Key, pair.Value));
         }
     }
 
@@ -27,56 +27,49 @@ public class InventoryManager : MonoBehaviour
         string itemName = _item.GetComponent<Item>().itemName;
         if (!inventory.ContainsKey(itemName))
         {
-            inventory.Add(itemName, _itemCount);
+            inventory.Add(itemName, new InventoryMeta(_item, _itemCount));
         }
         else
         {
-            Debug.Log("Inventory: " + itemName + "\nCount Before Add: " + inventory[itemName]);
-            inventory[itemName] += _itemCount;
-            Debug.Log("Inventory: " + itemName + "\nCount After Add: " + inventory[itemName]);
+            Debug.Log("Inventory: " + itemName + "\nCount Before Add: " + inventory[itemName].itemCount);
+            inventory[itemName].itemCount += _itemCount;
+            Debug.Log("Inventory: " + itemName + "\nCount After Add: " + inventory[itemName].itemCount);
         }
     }
 
     public Boolean RemoveItem(GameObject _item, int _itemCount)
     {
         string itemName = _item.GetComponent<Item>().itemName;
-        if (!inventory.ContainsKey(itemName) || inventory[itemName] < _itemCount)
+        if (!inventory.ContainsKey(itemName) || inventory[itemName].itemCount < _itemCount)
         {
             return false;
         }
-        Debug.Log("Inventory: " + itemName + "\nCount Before Remove: " + inventory[itemName]);
-        inventory[itemName] -= _itemCount;
-        Debug.Log("Inventory: " + itemName + "\nCount After Remove: " + inventory[itemName]);
+        Debug.Log("Inventory: " + itemName + "\nCount Before Remove: " + inventory[itemName].itemCount);
+        inventory[itemName].itemCount -= _itemCount;
+        Debug.Log("Inventory: " + itemName + "\nCount After Remove: " + inventory[itemName].itemCount);
         return true;
     }
 
-    public int GetItem(GameObject _item)
+    public int GetItemCount(GameObject _item)
     {
         string itemName = _item.GetComponent<Item>().itemName;
         if (!inventory.ContainsKey(itemName))
         {
             return 0;
         }
-        return inventory[itemName];
+        return inventory[itemName].itemCount;
     }
 
     [Serializable]
-    public class InventoryData
+    public class InventoryMeta
     {
         public GameObject item;
         public int itemCount;
 
-        public InventoryData(GameObject _item, int _itemCount)
+        public InventoryMeta(GameObject _item, int _itemCount)
         {
             this.item = _item;
             this.itemCount = _itemCount;
         }
-    }
-
-    [Serializable]
-    public class KeyValue<TKey, TValue>
-    {
-        public TKey key;
-        public TValue value;
     }
 }
