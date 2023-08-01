@@ -2,13 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager main;
 
+    [Header("References")]
+    [SerializeField] List<GameObject> itemCountDisplay = new List<GameObject>();
+
     [Header("Attributes")]
-    [SerializeField] List<SerialKeyValue<GameObject, int>> inventoryData;
+    [SerializeField] List<InventoryMeta> inventoryData;
 
     private Dictionary<string, InventoryMeta> inventory;
 
@@ -16,9 +20,11 @@ public class InventoryManager : MonoBehaviour
     {
         main = this;
         inventory = new Dictionary<string, InventoryMeta>();
-        foreach (SerialKeyValue<GameObject, int> pair in inventoryData)
+        foreach (InventoryMeta metaData in inventoryData)
         {
-            inventory.Add(pair.Key.GetComponent<Item>().itemName, new InventoryMeta(pair.Key, pair.Value));
+            string itemName = metaData.item.GetComponent<Item>().itemName;
+            inventory.Add(itemName, metaData);
+            inventory[itemName].itemCountDisplay.GetComponent<TMP_Text>().text = inventory[itemName].itemCount.ToString();
         }
     }
 
@@ -27,7 +33,8 @@ public class InventoryManager : MonoBehaviour
         string itemName = _item.GetComponent<Item>().itemName;
         if (!inventory.ContainsKey(itemName))
         {
-            inventory.Add(itemName, new InventoryMeta(_item, _itemCount));
+            // TODO: Add procedurally generated inventory display
+            inventory.Add(itemName, new InventoryMeta(_item, _itemCount, null));
         }
         else
         {
@@ -35,6 +42,7 @@ public class InventoryManager : MonoBehaviour
             inventory[itemName].itemCount += _itemCount;
             Debug.Log("Inventory: " + itemName + "\nCount After Add: " + inventory[itemName].itemCount);
         }
+        inventory[itemName].itemCountDisplay.GetComponent<TMP_Text>().text = inventory[itemName].itemCount.ToString();
     }
 
     public Boolean RemoveItem(GameObject _item, int _itemCount)
@@ -46,6 +54,7 @@ public class InventoryManager : MonoBehaviour
         }
         Debug.Log("Inventory: " + itemName + "\nCount Before Remove: " + inventory[itemName].itemCount);
         inventory[itemName].itemCount -= _itemCount;
+        inventory[itemName].itemCountDisplay.GetComponent<TMP_Text>().text = inventory[itemName].itemCount.ToString();
         Debug.Log("Inventory: " + itemName + "\nCount After Remove: " + inventory[itemName].itemCount);
         return true;
     }
@@ -65,11 +74,13 @@ public class InventoryManager : MonoBehaviour
     {
         public GameObject item;
         public int itemCount;
+        public GameObject itemCountDisplay;
 
-        public InventoryMeta(GameObject _item, int _itemCount)
+        public InventoryMeta(GameObject _item, int _itemCount, GameObject itemCountDisplay)
         {
             this.item = _item;
             this.itemCount = _itemCount;
+            this.itemCountDisplay = itemCountDisplay;
         }
     }
 }
