@@ -12,6 +12,7 @@ public class FactoryLevelManager : MonoBehaviour
     [SerializeField] private GameObject editingMenu;
     [SerializeField] private GameObject gameMenu;
     [SerializeField] private GameObject itemPickerMenu;
+    [SerializeField] private GameObject recipePickerMenu;
 
     [Header("Attributes")]
     [SerializeField] private int gridHeight;
@@ -45,6 +46,7 @@ public class FactoryLevelManager : MonoBehaviour
         DisableEditingMenu();
         EnableGameMenu();
         DisableItemPickerMenu();
+        DisableRecipePickerMenu();
         Pause();
     }
 
@@ -110,6 +112,22 @@ public class FactoryLevelManager : MonoBehaviour
         if (itemPickerMenu.activeSelf)
         {
             itemPickerMenu.SetActive(false);
+        }
+    }
+
+    public void EnableRecipePickerMenu()
+    {
+        if (!recipePickerMenu.activeSelf)
+        {
+            recipePickerMenu.SetActive(true);
+        }
+    }
+
+    public void DisableRecipePickerMenu()
+    {
+        if (recipePickerMenu.activeSelf)
+        {
+            recipePickerMenu.SetActive(false);
         }
     }
 
@@ -206,17 +224,16 @@ public class FactoryLevelManager : MonoBehaviour
                 }
                 break;
             case GameState.Play:
-                if (component.gameObject.name.Contains("Spawner"))
-                {
-                    EnableItemPickerMenu();
-                    gameObject.GetComponent<ItemPicker>().SetSpawner(component.gameObject);
-                }       
-                break;
             case GameState.Pause:
                 if (component.gameObject.name.Contains("Spawner"))
                 {
                     EnableItemPickerMenu();
                     gameObject.GetComponent<ItemPicker>().SetSpawner(component.gameObject);
+                }
+                else if (component.gameObject.name.Contains("Processor"))
+                {
+                    EnableRecipePickerMenu();
+                    gameObject.GetComponent<RecipePicker>().SetProcessor(component.gameObject);
                 }
                 break;
         }
@@ -225,6 +242,11 @@ public class FactoryLevelManager : MonoBehaviour
     public void OnItemSelected()
     {
         DisableItemPickerMenu();
+    }
+
+    public void OnRecipeSelected()
+    {
+        DisableRecipePickerMenu();
     }
 
     /*
