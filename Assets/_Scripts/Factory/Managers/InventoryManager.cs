@@ -8,9 +8,6 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager main;
 
-    [Header("References")]
-    [SerializeField] List<GameObject> itemCountDisplay = new List<GameObject>();
-
     [Header("Attributes")]
     [SerializeField] List<InventoryMeta> inventoryData;
 
@@ -67,6 +64,18 @@ public class InventoryManager : MonoBehaviour
             return 0;
         }
         return inventory[itemName].itemCount;
+    }
+
+    public GameObject[] GetInventoryPrefabs()
+    {
+        GameObject[] output = new GameObject[inventoryData.Count];
+
+        for (int c = 0; c < inventoryData.Count; c ++)
+        {
+            output[c] = inventoryData[c].item;
+        }
+
+        return output;
     }
 
     [Serializable]

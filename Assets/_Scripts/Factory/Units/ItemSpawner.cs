@@ -5,17 +5,18 @@ using UnityEngine;
 public class ItemSpawner : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private GameObject[] itemPrefabs;
     [SerializeField] private GameObject sendPoint;
 
     [Header("Attributes")]
     [SerializeField] private float itemSpawnRate;
 
+    private GameObject[] itemPrefabs;
     private float timeSinceLastSpawn;
     private int selectedItem;
 
     private void Start()
     {
+        itemPrefabs = InventoryManager.main.GetInventoryPrefabs();
         selectedItem = -1;
     }
 
