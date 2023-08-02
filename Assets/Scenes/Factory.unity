@@ -3789,7 +3789,7 @@ MonoBehaviour:
     itemCountDisplay: {fileID: 690218258}
   - item: {fileID: 13023781314342790, guid: 7542fbb77e82c0a4bb53c2bd11657033, type: 3}
     itemCount: 5
-    itemCountDisplay: {fileID: 690218258}
+    itemCountDisplay: {fileID: 1693954480}
 --- !u!114 &1270936049
 MonoBehaviour:
   m_ObjectHideFlags: 0
