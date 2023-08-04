@@ -12,45 +12,59 @@ public class ItemHandler : MonoBehaviour
     [SerializeField] private List<ItemConversion> itemConversions;
     [SerializeField] private float itemMoveSpeed;
 
-    private Queue<ItemConversion> conversionQueue;
+    private ItemConversion conversion;
+    private Dictionary<string, int> inputRequirements;
+    private Dictionary<string, int> inputStorage;
     private float conversionTimeLeft;
-    private GameObject outputItem;
-    private int recipeIndex;
+    private Boolean processing;
 
     private void Awake()
     {
-        conversionQueue = new Queue<ItemConversion>();
-        recipeIndex = -1;
+        conversion = null;
+        inputRequirements = new Dictionary<string, int>();
+        inputStorage = new Dictionary<string, int>();
+        processing = false;
     }
 
     private void Update()
     {
-        if (conversionQueue.Count == 0 && outputItem == null) return;
+        if (conversion == null) return;
 
-        if (outputItem == null)
+        if (InputRequirementsMet() && !processing)
         {
-            ItemConversion itemConversion = conversionQueue.Dequeue();
-            conversionTimeLeft = itemConversion.conversionTime;
-            outputItem = itemConversion.outputItem;
+            Debug.Log("Starting conversion time: " + conversionTimeLeft);
+            conversionTimeLeft = conversion.conversionTime;
+            processing = true;
         }
-        else
+        else if (processing)
         {
             conversionTimeLeft -= Time.deltaTime;
             if (conversionTimeLeft <= 0)
             {
-                Instantiate(outputItem, transform.position, Quaternion.identity).GetComponent<ItemMovement>().MoveTo(sendPoint, itemMoveSpeed);
-                outputItem = null;
+                foreach (GameObject outputItem in conversion.outputItems)
+                {
+                    Instantiate(outputItem, transform.position, Quaternion.identity).GetComponent<ItemMovement>().MoveTo(sendPoint, itemMoveSpeed);
+                }
+                inputStorage.Clear();
+                processing = false;
             }
         }
         
     }
     public virtual void ProcessItem(GameObject _item)
     {
-        if (recipeIndex >= 0 && recipeIndex < itemConversions.Count &&
-            itemConversions[recipeIndex].inputItem.GetComponent<Item>().itemName == _item.GetComponent<Item>().itemName)
+        string itemName = _item.GetComponent<Item>().itemName;
+        // TODO: This debug log is preventing proper runs for spawner
+        
+        if (conversion!= null && !processing && inputRequirements.ContainsKey(itemName) && inputStorage.GetValueOrDefault(itemName, 0) < inputRequirements[itemName])
         {
-            conversionQueue.Enqueue(itemConversions[recipeIndex]);
+            if (!inputStorage.ContainsKey(itemName))
+            {
+                inputStorage[itemName] = 0;
+            }
+            inputStorage[itemName] += 1;
             Destroy(_item);
+            
         }
         else
         {
@@ -60,28 +74,53 @@ public class ItemHandler : MonoBehaviour
 
     public void SelectItemConversion(int _index)
     {
+        inputRequirements = new Dictionary<string, int>();
         if (_index < -1 || _index > itemConversions.Count)
         {
             Debug.LogWarning("Item Conversion index out of bounds, using None recipe.");
-            recipeIndex = -1;
+            conversion = null;
         }
         else
         {
-            recipeIndex = _index;
+            conversion = itemConversions[_index];
+            foreach (GameObject inputItem in conversion.inputItems)
+            {
+                if (inputRequirements.ContainsKey(inputItem.GetComponent<Item>().itemName))
+                {
+                    inputRequirements[inputItem.GetComponent<Item>().itemName] += 1;
+                }
+                else
+                {
+                    inputRequirements.Add(inputItem.GetComponent<Item>().itemName, 1);
+                }
+            }
         }
+    }
+
+    private Boolean InputRequirementsMet()
+    {
+        foreach (string itemName in inputRequirements.Keys)
+        {
+            if (inputStorage.GetValueOrDefault(itemName, 0) < inputRequirements[itemName])
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     [Serializable]
     public class ItemConversion
     {
-        public GameObject inputItem;
+        public GameObject[] inputItems;
         public float conversionTime;
-        public GameObject outputItem;
-        public ItemConversion(GameObject _inputItem, float _conversionTime, GameObject _outputItem)
+        public GameObject[] outputItems;
+        public ItemConversion(GameObject[] _inputItems, float _conversionTime, GameObject[] _outputItems)
         {
-            inputItem = _inputItem;
+            inputItems = _inputItems;
             conversionTime = _conversionTime;
-            outputItem = _outputItem;
+            outputItems = _outputItems;
         }
     }
 }

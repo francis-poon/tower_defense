@@ -250,12 +250,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26c3911447523ce4793d333b62011550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefabs:
-  - {fileID: 2385675583366129763, guid: 62cb69e01dd73524982509a9dda768cc, type: 3}
-  - {fileID: 2486853708270992944, guid: 44a051b6c2a39e5448df301907f26414, type: 3}
   sendPoint: {fileID: 6100435562962580985}
-  itemPickerMenu: {fileID: 0}
-  itemSpawnRate: 0.5
+  itemSpawnRate: 1
 --- !u!114 &93741167012024476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,6 +377,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sendPoint: {fileID: 1638240078086605979}
-  inputItems: []
   itemConversions: []
   itemMoveSpeed: 0.5

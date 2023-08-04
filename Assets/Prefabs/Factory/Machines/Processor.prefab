@@ -82,12 +82,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sendPoint: {fileID: 6394784292401845687}
   itemConversions:
-  - inputItem: {fileID: 2385675583366129763, guid: 62cb69e01dd73524982509a9dda768cc, type: 3}
+  - inputItems:
+    - {fileID: 2385675583366129763, guid: 62cb69e01dd73524982509a9dda768cc, type: 3}
     conversionTime: 2
-    outputItem: {fileID: 2486853708270992944, guid: 44a051b6c2a39e5448df301907f26414, type: 3}
-  - inputItem: {fileID: 2385675583366129763, guid: 62cb69e01dd73524982509a9dda768cc, type: 3}
+    outputItems:
+    - {fileID: 2486853708270992944, guid: 44a051b6c2a39e5448df301907f26414, type: 3}
+  - inputItems:
+    - {fileID: 2385675583366129763, guid: 62cb69e01dd73524982509a9dda768cc, type: 3}
     conversionTime: 2
-    outputItem: {fileID: 13023781314342790, guid: 7542fbb77e82c0a4bb53c2bd11657033, type: 3}
+    outputItems:
+    - {fileID: 13023781314342790, guid: 7542fbb77e82c0a4bb53c2bd11657033, type: 3}
   itemMoveSpeed: 0.5
 --- !u!114 &-1404890470364357351
 MonoBehaviour:
