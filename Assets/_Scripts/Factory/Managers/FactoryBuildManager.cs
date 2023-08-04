@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,5 +37,25 @@ public class FactoryBuildManager : MonoBehaviour
             return machines[machineIndex].prefab;
         }
         return machines[0].prefab;
+    }
+
+    [Serializable]
+    public class Machine
+    {
+        public string name;
+        public int cost;
+        public GameObject prefab;
+
+        public Machine(string _name, int _cost, GameObject _prefab)
+        {
+            name = _name;
+            cost = _cost;
+            prefab = _prefab;
+        }
+
+        public void ProcessItem(GameObject _item)
+        {
+            return;
+        }
     }
 }
